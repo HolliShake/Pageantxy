@@ -5,8 +5,8 @@ export default [
     icon: { icon: 'tabler-layout-dashboard' },
   },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
+    title: 'Candidates',
+    to: { name: 'candidates' },
+    icon: { icon: 'tabler-users-group' },
   },
 ]
