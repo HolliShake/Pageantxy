@@ -8,18 +8,28 @@ import router from '@/router'
 import '@core/scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
-import { createApp } from 'vue'
+import { createApp, watch } from 'vue'
 
 loadFonts()
 
 
 // Create vue app
 const app = createApp(App)
+const pinia = createPinia()
+
+watch(
+  pinia.state,
+  state => {
+    // persist the whole state to the local storage whenever it changes
+    localStorage.setItem('piniaState', JSON.stringify(state))
+  },
+  { deep: true },
+)
 
 
 // Use plugins
 app.use(vuetify)
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 app.use(layoutsPlugin)
 

@@ -12,9 +12,9 @@ class AuthService extends GenericService {
     return axiosIns.post(this.baseUrl + '/login', payload)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error('>>>>>', err)  
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
     
@@ -22,9 +22,9 @@ class AuthService extends GenericService {
     return axiosIns.post(this.baseUrl + '/register', payload)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
 }

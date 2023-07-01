@@ -29,9 +29,9 @@ class GenericService {
     return axiosIns.get(this.baseUrl + '/all')
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)
+        console.error(err)
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
     
@@ -39,39 +39,39 @@ class GenericService {
     return axiosIns.get(this.baseUrl + `/${id}`)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)  
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
     
   async create(payload) {
-    return axiosIns.get(this.baseUrl + '/create', payload)
+    return axiosIns.post(this.baseUrl + '/create', payload)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)  
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
     
   async update(id, payload) {
-    return axiosIns.get(this.baseUrl + `/update/${id}`, payload)
+    return axiosIns.put(this.baseUrl + `/update/${id}`, payload)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)  
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
 
   async delete(id) {
-    return axiosIns.get(this.baseUrl + `/delete/${id}`)
+    return axiosIns.delete(this.baseUrl + `/delete/${id}`)
       .then(res => this.success(res.data))
       .catch(err => {
-        console.error(err.response.data)  
+        console.error(err)  
           
-        return this.fail(null)
+        return this.fail(err.response?.data)
       })
   }
 

@@ -28,6 +28,8 @@ declare module '@vue/runtime-core' {
     AppTextarea: typeof import('./src/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./src/@core/components/app-form-elements/AppTextField.vue')['default']
     BuyNow: typeof import('./src/@core/components/BuyNow.vue')['default']
+    Calendar: typeof import('./src/components/pageantxy/calendar/Calendar.vue')['default']
+    CalendarEventHandler: typeof import('./src/components/pageantxy/calendar/CalendarEventHandler.vue')['default']
     CardAddEditDialog: typeof import('./src/components/dialogs/CardAddEditDialog.vue')['default']
     CardStatisticsHorizontal: typeof import('./src/@core/components/cards/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
@@ -58,6 +60,7 @@ declare module '@vue/runtime-core' {
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
     TwoFactorAuthDialog: typeof import('./src/components/dialogs/TwoFactorAuthDialog.vue')['default']
     UserInfoEditDialog: typeof import('./src/components/dialogs/UserInfoEditDialog.vue')['default']
+    UserTable: typeof import('./src/components/pageantxy/user/UserTable.vue')['default']
     UserUpgradePlanDialog: typeof import('./src/components/dialogs/UserUpgradePlanDialog.vue')['default']
   }
 }
