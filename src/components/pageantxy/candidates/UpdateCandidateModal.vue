@@ -6,6 +6,16 @@ import useFileStore from '@/stores/file.store'
 import { integerValidator, requiredValidator } from '@core/utils/validators'
 import { nextTick } from 'vue'
 
+const parameters = defineProps({
+  candidateId: {
+    type: [Number, null],
+    required: true,
+  },
+  icon: {
+    type: Boolean,
+    default: true,
+  },
+})
 
 const formState = ref({
   firstName: '',
@@ -18,12 +28,26 @@ const formState = ref({
 })
 
 const imageObject = ref(null)
+const imageDisplay = ref(null)
 
 const isDialogVisible = ref(false)
 const fileStore = useFileStore()
 const candidateStore = useCandidateStore()
 const refVForm = ref(null)
 const submitted = ref(false)
+
+watch(isDialogVisible, () => {
+
+  if (!isDialogVisible.value || parameters.candidateId <= 0) return
+
+  // Query
+  candidateStore.getCandidateById(parameters.candidateId)
+    .then(candidate => { 
+      Object.assign(formState.value, candidate)
+      imageDisplay.value = candidate.picture
+    })
+  
+}, { deep: true })
 
 const onSubmit = async () => {
 
@@ -33,22 +57,38 @@ const onSubmit = async () => {
 
   if (await refVForm.value.validate())
   {
-    fileStore.uploadFile(imageObject.value)
-      .then(file => {
-        candidateStore.createCandidate({ ...formState.value, picture: file  })
-          // eslint-disable-next-line promise/no-nesting
-          .then(() => { 
-            isDialogVisible.value = false
-            submitted.value = false
-            nextTick(() => {
-              refVForm.value?.reset()
-              refVForm.value.resetValidation()
+    if (imageObject.value != null)
+    {
+      fileStore.uploadFile(imageObject.value)
+        .then(file => {
+          candidateStore.updateCandidate(parameters.candidateId, { ...formState.value, picture: file })
+            // eslint-disable-next-line promise/no-nesting
+            .then(() => {
+              isDialogVisible.value = false
+              submitted.value = false
+              nextTick(() => {
+                refVForm.value?.reset()
+                refVForm.value.resetValidation()
+              })
             })
+            // eslint-disable-next-line promise/no-nesting
+            .catch(() => submitted.value = false)
+        })
+        .catch(() => submitted.value = false)
+    }
+    else
+    {
+      candidateStore.updateCandidate(parameters.candidateId, formState.value)
+        .then(() => {
+          isDialogVisible.value = false
+          submitted.value = false
+          nextTick(() => {
+            refVForm.value?.reset()
+            refVForm.value.resetValidation()
           })
-          // eslint-disable-next-line promise/no-nesting
-          .catch(err => submitted.value = false)
-      })
-      .catch(err => submitted.value = false)
+        })
+        .catch(() => submitted.value = false)
+    }
   }
   else
   {
@@ -68,15 +108,21 @@ const onSubmit = async () => {
     <!-- Dialog Activator -->
     <template #activator="{ props }">
       <VBtn
+        v-if="parameters.icon"
+        v-bind="props"
+        variant="text"
+        icon="tabler-edit"
+        size="x-small"
+        rounded="circle"
+        color="secondary"
+      />
+      <VBtn
+        v-else
         v-bind="props"
         block
+        color="success"
       >
-        <VIcon
-          start
-          icon="tabler-user-plus"
-        />
-
-        Create candidate
+        Update Candidate
       </VBtn>
     </template>
 
@@ -84,7 +130,7 @@ const onSubmit = async () => {
     <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
     <!-- Dialog Content -->
-    <VCard title="Create a new candidate?">
+    <VCard title="Update candidate">
       <VCardText>
         <VForm ref="refVForm">
           <VRow>
@@ -140,7 +186,10 @@ const onSubmit = async () => {
               />
             </VCol>
             <VCol cols="12">
-              <PickImageInput v-model="imageObject" />
+              <PickImageInput
+                v-model="imageObject"
+                v-model:displayOnly="imageDisplay"
+              />
             </VCol>
           </VRow>
         </VForm>
@@ -155,7 +204,7 @@ const onSubmit = async () => {
           Cancel
         </VBtn>
         <VBtn @click="onSubmit">
-          Create
+          Update
         </VBtn>
       </VCardText>
     </VCard>

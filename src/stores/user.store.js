@@ -22,7 +22,10 @@ const useUserStore = defineStore('UserStore', {
 
   actions: {
 
-    async fetchUsers() { 
+    async fetchUsers()
+    { 
+      if (this.users.length > 0) return Promise.resolve(this.users)
+      
       let result = await userService.getAll()
     
       if (result.FAIL) return Promise.resolve([])
@@ -33,7 +36,8 @@ const useUserStore = defineStore('UserStore', {
       return Promise.resolve(this.users)
     },
       
-    async getUserById(userId) { 
+    async getUserById(userId)
+    { 
       let user = null
         
       if (this.candidates.length > 0)

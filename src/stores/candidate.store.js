@@ -1,6 +1,7 @@
 import CandidateService from "@/services/CandidateService"
 import _ from 'lodash'
 import { defineStore } from "pinia"
+import action from "./action"
 
 const candidateService = new CandidateService()
 
@@ -22,7 +23,10 @@ const useCandidateStore = defineStore('CandidateStore', {
 
   actions: {
 
-    async fetchCandidates() {
+    async fetchCandidates()
+    {
+      if (this.candidates.length > 0) return Promise.resolve(this.candidates)
+
       let result = await candidateService.getAll()
 
       if (result.FAIL) return Promise.resolve([])
@@ -33,7 +37,8 @@ const useCandidateStore = defineStore('CandidateStore', {
       return Promise.resolve(this.candidates)
     },
       
-    async getCandidateById(candidateId) { 
+    async getCandidateById(candidateId)
+    { 
       let candidate = null
         
       if (this.candidates.length > 0)
@@ -55,14 +60,14 @@ const useCandidateStore = defineStore('CandidateStore', {
       let result = await candidateService.create(candidate)
 
       if (result.SUCCESS)
-        this.events.push(result.data)
+        this.candidates.push(result.data)
       
       return action(result)
     },
 
     async updateCandidate(candidateId, candidate)
     {
-      let result = await eventService.update(candidateId, candidate)
+      let result = await candidateService.update(candidateId, candidate)
 
       if (result.SUCCESS)
         _.merge(this.candidates.find(c => c.id == candidateId), candidate)
@@ -72,10 +77,10 @@ const useCandidateStore = defineStore('CandidateStore', {
 
     async deleteCandidate(candidateId)
     {
-      let result = await eventService.delete(candidateId)
+      let result = await candidateService.delete(candidateId)
 
       if (result.SUCCESS)
-        this.events = this.events.filter(c => c.id != candidateId)
+        this.candidates = this.candidates.filter(c => c.id != candidateId)
       
       return action(result)
     },

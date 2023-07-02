@@ -1,0 +1,184 @@
+
+<script setup>
+import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
+import useContestStore from '@/stores/contest.store'
+import { computed, watch } from 'vue'
+import { VDataTable } from 'vuetify/labs/VDataTable'
+import CreateContestModal from './CreateContestModal.vue'
+import DeleteContestModal from './DeleteContestModal.vue'
+import UpdateContestModal from './UpdateContestModal.vue'
+
+const availableFilter = ref([
+  { title: 'any', value: 'any' },
+  { title: 'open', value: false },
+  { title: 'locked', value: true },
+])
+
+const contestStore = useContestStore()
+const searchQuery = ref('')
+const filterStatus = ref(availableFilter.value[0].value)
+const event = ref(null)
+const contests = computed(() => contestStore.getContests)
+
+const filteredContest = computed(() => { 
+  let result = contests.value
+    .filter(c => c.contestName.toLowerCase().includes(searchQuery.value.toLowerCase()))
+    .filter(c => filterStatus.value == 'any' ? true : c.isLocked == filterStatus.value)
+
+  if (event.value != null)
+    return result.filter(c => c.eventId == event.value) 
+  
+  return result
+})
+
+const headers = ref([
+  {
+    title: 'CONTEST NAME',
+    key: 'contestName',
+  },
+  {
+    title: 'WEIGHT',
+    key: 'weight',
+  },
+  {
+    title: 'MIN SCORE',
+    key: 'inputMin',
+  },
+  {
+    title: 'MAX SCORE',
+    key: 'inputMax',
+  },
+  {
+    title: 'ORDER',
+    key: 'contestOrder',
+  },
+  {
+    title: 'STATUS',
+    key: 'status',
+  },
+  {
+    title: 'CONTEST STATUS',
+    key: 'contestStatus',
+  },
+  {
+    title: 'ACTION',
+    key: 'action',
+  },
+])
+
+onMounted(() => {
+  contestStore.fetchContests()
+})
+
+watch(event, () => console.log('>>', event.value), { deep: true })
+
+const resolveStatusVariant = status => {
+  if (status)
+    return {
+      color: 'primary',
+      text: 'open',
+    }
+  else
+    return {
+      color: 'error',
+      text: 'locked',
+    }
+}
+
+const resolveContestStausVariant = status => {
+  if (status)
+    return {
+      color: 'primary',
+      text: 'active',
+    }
+  else
+    return {
+      color: 'secondary',
+      text: 'inactive',
+    }
+}
+</script>
+
+<template>
+  <VRow>
+    <VCol
+      cols="12"
+      md="3"
+    >
+      <VCard>
+        <VCardText>
+          <VRow>
+            <!-- search -->
+            <VCol cols="12">
+              <VTextField
+                v-model="searchQuery"
+                label="Search contest"
+              />
+            </VCol>
+            <!-- Filter status -->
+            <VCol cols="12">
+              <VSelect
+                v-model="filterStatus"
+                label="Filter status"
+                :items="availableFilter"
+              />
+            </VCol>
+            <!-- event -->
+            <VCol cols="12">
+              <SelectEvent v-model="event" />
+            </VCol>
+            <!-- control -->
+            <VCol
+              cols="12"
+              order-last
+            >
+              <CreateContestModal />
+            </VCol>
+          </VRow>
+        </VCardText>
+      </VCard>
+    </VCol>
+
+    <!-- table -->
+    <VCol
+      cols="12"
+      md="9"
+    >
+      <VCard title="Contests">
+        <VCardText>
+          <VDataTable
+            class="table-header-bg"
+            :headers="headers"
+            :items="filteredContest"
+            :items-per-page="5"
+          >
+            <!-- status -->
+            <template #item.status="{ item }">
+              <VChip
+                :color="resolveStatusVariant(item.raw.isAdminVerified).color"
+                size="small"
+              >
+                {{ resolveStatusVariant(item.raw.isLocked).text }}
+              </VChip>
+            </template>
+            
+            <!-- contest status -->
+            <template #item.contestStatus="{ item }">
+              <VChip
+                :color="resolveContestStausVariant(item.raw.isActive).color"
+                size="small"
+              >
+                {{ resolveContestStausVariant(item.raw.isActive).text }}
+              </VChip>
+            </template>
+            <!-- action -->
+            <template #item.action="{ item }">
+              <UpdateContestModal :contest-id="item.raw.id" />
+              <DeleteContestModal :contest-id="item.raw.id" />
+            </template>
+          </VDataTable>
+        </VCardText>
+      </VCard>
+    </VCol>
+  </VRow>
+</template>

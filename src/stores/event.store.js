@@ -23,7 +23,10 @@ const useEventStore = defineStore('EventStore', {
 
   actions: {
     
-    async fetchEvents() {
+    async fetchEvents()
+    {
+      if (this.events.length > 0) return Promise.resolve(this.events)
+      
       let result = await eventService.getAll()
 
       if (result.FAIL) return Promise.resolve([])
@@ -34,7 +37,8 @@ const useEventStore = defineStore('EventStore', {
       return Promise.resolve(this.events)
     },
 
-    async getEventById(eventId) { 
+    async getEventById(eventId)
+    { 
       let event = null
         
       if (this.candidates.length > 0)
