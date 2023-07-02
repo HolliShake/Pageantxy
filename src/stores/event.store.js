@@ -41,7 +41,7 @@ const useEventStore = defineStore('EventStore', {
     { 
       let event = null
         
-      if (this.candidates.length > 0)
+      if (this.events.length > 0)
         event = this.events.find(e => e.id == eventId)
         
       else {

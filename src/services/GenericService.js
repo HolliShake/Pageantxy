@@ -35,7 +35,7 @@ class GenericService {
       })
   }
     
-  async get(id) {
+  async getById(id) {
     return axiosIns.get(this.baseUrl + `/${id}`)
       .then(res => this.success(res.data))
       .catch(err => {

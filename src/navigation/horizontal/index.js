@@ -24,6 +24,11 @@ export default [
         icon: { icon: 'tabler-barbell' },
       },
       {
+        title: 'Users',
+        to: { name: 'miscs-users' },
+        icon: { icon: 'tabler-users-group' },
+      },
+      {
         title: 'Logs',
         to: { name: 'miscs-logs' },
         icon: { icon: 'tabler-info-square-rounded' },

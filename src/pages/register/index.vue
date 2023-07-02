@@ -1,4 +1,5 @@
 <script setup>
+import RegisterTable from '@/components/pageantxy/register/RegisterTable.vue'
 
 //
 </script>
@@ -6,7 +7,7 @@
 
 <template>
   <section>
-    <h1>Coming soon!</h1>
+    <RegisterTable />
   </section>
 </template>
 
