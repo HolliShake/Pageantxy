@@ -39,7 +39,7 @@ watch(events, () => {
 
 watch(selectedEvent, () => {
   emit('update:modelValue', selectedEvent.value)
-}, { deep: true })
+}, { deep: true, immediate: true })
 
 watchEffect(() => {
   eventStore.fetchEvents()

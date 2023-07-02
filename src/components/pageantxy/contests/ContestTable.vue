@@ -2,7 +2,7 @@
 <script setup>
 import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import useContestStore from '@/stores/contest.store'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 import CreateContestModal from './CreateContestModal.vue'
 import DeleteContestModal from './DeleteContestModal.vue'
@@ -21,7 +21,9 @@ const event = ref(null)
 const contests = computed(() => contestStore.getContests)
 
 const filteredContest = computed(() => { 
+  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
   let result = contests.value
+    .sort((a, b) => (a.contestOrder - b.contestOrder))
     .filter(c => c.contestName.toLowerCase().includes(searchQuery.value.toLowerCase()))
     .filter(c => filterStatus.value == 'any' ? true : c.isLocked == filterStatus.value)
 
@@ -70,10 +72,8 @@ onMounted(() => {
   contestStore.fetchContests()
 })
 
-watch(event, () => console.log('>>', event.value), { deep: true })
-
 const resolveStatusVariant = status => {
-  if (status)
+  if (!status)
     return {
       color: 'primary',
       text: 'open',
@@ -155,7 +155,7 @@ const resolveContestStausVariant = status => {
             <!-- status -->
             <template #item.status="{ item }">
               <VChip
-                :color="resolveStatusVariant(item.raw.isAdminVerified).color"
+                :color="resolveStatusVariant(item.raw.isLocked).color"
                 size="small"
               >
                 {{ resolveStatusVariant(item.raw.isLocked).text }}

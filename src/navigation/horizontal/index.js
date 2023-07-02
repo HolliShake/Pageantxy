@@ -10,6 +10,11 @@ export default [
     icon: { icon: 'tabler-users-group' },
   },
   {
+    title: 'Registration',
+    to: { name: 'register' },
+    icon: { icon: 'tabler-square-rounded-plus' },
+  },
+  {
     title: 'Miscs',
     icon: { icon: 'tabler-tool' },
     children: [
