@@ -8,17 +8,21 @@ import router from '@/router'
 import '@core/scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
-import { createApp, watch } from 'vue'
+import { createApp, markRaw, watch } from 'vue'
 
 loadFonts()
 
 
 // Create vue app
 const app = createApp(App)
-const pinia = createPinia()
+const piniaState = createPinia()
+
+piniaState.use(({ store }) => {
+  store.$router = markRaw(router)
+})
 
 watch(
-  pinia.state,
+  piniaState.state,
   state => {
     // persist the whole state to the local storage whenever it changes
     localStorage.setItem('piniaState', JSON.stringify(state))
@@ -26,10 +30,9 @@ watch(
   { deep: true },
 )
 
-
 // Use plugins
 app.use(vuetify)
-app.use(pinia)
+app.use(piniaState)
 app.use(router)
 app.use(layoutsPlugin)
 

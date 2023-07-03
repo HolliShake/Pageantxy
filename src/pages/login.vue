@@ -36,7 +36,18 @@ const onSignin = async () => {
   {
     authStore.login(email.value, password.value)
       .then(user => {
-        router.push({ name: 'dashboard' })
+
+        let abilities = JSON.parse(localStorage.getItem('userAbilities'))
+
+        if (!abilities) router.push({ name: 'logout' })
+
+        let isAdmin = !(!Array.from(new Set(abilities.map(a => a.subject)))
+          .find(subject => subject == 'all' || subject.toLowerCase() == 'admin'))
+
+        if (isAdmin)
+          router.push({ name: 'dashboard' })
+        else
+          router.push({ name: 'scoring' })
       })
       .catch(err => { 
         error.value = err

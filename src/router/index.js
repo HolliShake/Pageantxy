@@ -34,7 +34,7 @@ router.beforeEach(route => {
     }
     else
     { 
-      return { name: 'index', query: { to: route.name != "index" ? route.fullPath : undefined } }
+      return { name: 'login', query: { to: route.name != "index" ? route.fullPath : undefined } }
     }
   }
 

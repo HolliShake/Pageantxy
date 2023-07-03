@@ -76,7 +76,7 @@ const useAuthStore = defineStore('AuthStore', {
 
       if (newUser.SUCCESS)
       {
-        useUserStore().appendUser(newUser.data)
+        await useUserStore().appendUser(newUser.data)
       }
       
       return action(newUser)

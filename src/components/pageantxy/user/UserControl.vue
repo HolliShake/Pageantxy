@@ -7,6 +7,7 @@ import useUserStore from '@/stores/user.store'
 import NoImageAvailable from '@images/pageantxy/NoImageAvailable.png'
 import { nextTick, ref, watch } from 'vue'
 import DeleteUserModal from './DeleteUserModal.vue'
+import VerifyUserModal from './VerifyUserModal.vue'
 
 const props = defineProps({
   modelValue: {
@@ -40,6 +41,8 @@ watch(props, () => {
   userStore.getUserById(props.modelValue)
     .then(u => {
       Object.assign(formState.value, u)
+
+      console.log('>>>>>>>', u)
     })
 }, { deep: true, immediate: true })
 
@@ -228,6 +231,8 @@ const onSubmit = async () => {
                 <VCol cols="12">
                   <VCardText class="pa-2">
                     <div class="demo-space-x justify-end">
+                      <VerifyUserModal :user-id="props.modelValue" />
+
                       <DeleteUserModal :user-id="props.modelValue" />
 
                       <VBtn @click="onSubmit">

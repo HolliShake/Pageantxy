@@ -83,5 +83,7 @@ declare module '@vue/runtime-core' {
     UserTable: typeof import('./src/components/pageantxy/user/UserTable.vue')['default']
     UserTableControl: typeof import('./src/components/pageantxy/user/UserTableControl.vue')['default']
     UserUpgradePlanDialog: typeof import('./src/components/dialogs/UserUpgradePlanDialog.vue')['default']
+    VerifyUser: typeof import('./src/components/pageantxy/user/VerifyUser.vue')['default']
+    VerifyUserModal: typeof import('./src/components/pageantxy/user/VerifyUserModal.vue')['default']
   }
 }

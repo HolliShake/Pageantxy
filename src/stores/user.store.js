@@ -17,19 +17,17 @@ const useUserStore = defineStore('UserStore', {
       return this.users
     },
     usersLoaded() {
-      return this.loaded 
+      return this.loaded
     },
   },
 
   actions: {
 
-    async appendUser(user)
-    {
+    async appendUser(user) {
       this.users.push(user)
     },
 
-    async fetchUsers()
-    { 
+    async fetchUsers() {
       if (this.users.length > 0) return Promise.resolve(this.users)
       
       let result = await userService.getAll()
@@ -42,8 +40,7 @@ const useUserStore = defineStore('UserStore', {
       return Promise.resolve(this.users)
     },
       
-    async getUserById(userId)
-    { 
+    async getUserById(userId) {
       let user = null
         
       if (this.users.length > 0)
@@ -60,8 +57,7 @@ const useUserStore = defineStore('UserStore', {
       return Promise[user ? 'resolve' : 'reject'](user)
     },
       
-    async createUser(user)
-    {
+    async createUser(user) {
       let result = await userService.create(user)
         
       if (result.SUCCESS)
@@ -70,8 +66,7 @@ const useUserStore = defineStore('UserStore', {
       return action(result)
     },
     
-    async updateUser(userId, user)
-    {
+    async updateUser(userId, user) {
       let result = await userService.update(userId, user)
     
       if (result.SUCCESS)
@@ -79,9 +74,19 @@ const useUserStore = defineStore('UserStore', {
             
       return action(result)
     },
+
+    async verifyUser(userId, user) {
+      let result = await userService.verify(userId)
     
-    async deleteUser(userId)
-    {
+      if (result.SUCCESS)
+        _.merge(this.users.find(e => e.id == userId), user)
+      
+      console.log('>>>>>>>>>>>>>', user, this.users.find(e => e.id == userId))
+            
+      return action(result)
+    },
+    
+    async deleteUser(userId) {
       let result = await userService.delete(userId)
     
       if (result.SUCCESS)
