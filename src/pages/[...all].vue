@@ -1,4 +1,5 @@
 <script setup>
+import ErrorHeader from '@/components/ErrorHeader.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import misc404 from '@images/pages/404.png'
 import miscMaskDark from '@images/pages/misc-mask-dark.png'

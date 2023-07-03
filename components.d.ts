@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     CreateCandidateModal: typeof import('./src/components/pageantxy/candidates/CreateCandidateModal.vue')['default']
     CreateContestModal: typeof import('./src/components/pageantxy/contests/CreateContestModal.vue')['default']
     CreateRegisterModal: typeof import('./src/components/pageantxy/register/CreateRegisterModal.vue')['default']
+    CreateUserModal: typeof import('./src/components/pageantxy/user/CreateUserModal.vue')['default']
     CustomCheckboxes: typeof import('./src/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
     CustomCheckboxesWithIcon: typeof import('./src/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']
     CustomCheckboxesWithImage: typeof import('./src/@core/components/app-form-elements/CustomCheckboxesWithImage.vue')['default']
@@ -76,8 +77,10 @@ declare module '@vue/runtime-core' {
     UpdateCandidateModal: typeof import('./src/components/pageantxy/candidates/UpdateCandidateModal.vue')['default']
     UpdateContestModal: typeof import('./src/components/pageantxy/contests/UpdateContestModal.vue')['default']
     UpdateRegisterModal: typeof import('./src/components/pageantxy/register/UpdateRegisterModal.vue')['default']
+    UserControl: typeof import('./src/components/pageantxy/user/UserControl.vue')['default']
     UserInfoEditDialog: typeof import('./src/components/dialogs/UserInfoEditDialog.vue')['default']
     UserTable: typeof import('./src/components/pageantxy/user/UserTable.vue')['default']
+    UserTableControl: typeof import('./src/components/pageantxy/user/UserTableControl.vue')['default']
     UserUpgradePlanDialog: typeof import('./src/components/dialogs/UserUpgradePlanDialog.vue')['default']
   }
 }

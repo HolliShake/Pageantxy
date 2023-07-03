@@ -1,8 +1,27 @@
 <script setup>
 import useAuthStore from '@/stores/auth.store'
-import avatar1 from '@images/avatars/avatar-1.png'
+import NoImageAvailable from '@images/pageantxy/NoImageAvailable.png'
 
 const authStore = useAuthStore()
+
+function computedPicture(picture)
+{
+  if (!picture) return NoImageAvailable
+
+  if (picture.length <= 0) 
+    return NoImageAvailable
+
+  return `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`
+}
+
+function parseAbilities(roles)
+{
+  if (!roles) return []
+  
+  let abilities = JSON.parse(roles)
+  
+  return Array.from(new Set(abilities.map(r => (r.subject == 'all') ? 'admin' : r.subject)))
+}
 </script>
 
 <template>
@@ -19,7 +38,7 @@ const authStore = useAuthStore()
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="computedPicture(authStore.getPicture)" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -44,7 +63,7 @@ const authStore = useAuthStore()
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="computedPicture(authStore.getPicture)" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -53,7 +72,16 @@ const authStore = useAuthStore()
             <VListItemTitle class="font-weight-semibold">
               {{ authStore.getFirstName }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>
+              <template
+                v-for="(r, idx) in parseAbilities(authStore.getRole)"
+                :key="idx"
+              >
+                {{ r }}
+
+                <span v-if="idx < parseAbilities(authStore.getRole).length - 1">, &nbsp;</span>
+              </template>
+            </VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
@@ -71,19 +99,6 @@ const authStore = useAuthStore()
               <VListItemTitle>Profile</VListItemTitle>
             </VListItem>
           </RouterLink>
-
-          <!-- 👉 Settings -->
-          <VListItem link>
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-settings"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Settings</VListItemTitle>
-          </VListItem>
 
           <!-- Divider -->
           <VDivider class="my-2" />

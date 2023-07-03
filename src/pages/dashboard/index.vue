@@ -19,3 +19,10 @@ import UserTable from '@/components/pageantxy/user/UserTable.vue'
     </VRow>
   </section>
 </template>
+
+<route lang="yaml">
+  meta:
+    subject: all
+    action: manage
+    requiresAuth: true
+</route>

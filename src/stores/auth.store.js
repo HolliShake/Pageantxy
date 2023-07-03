@@ -15,6 +15,9 @@ const useAuthStore = defineStore('AuthStore', {
   }),
 
   getters: {
+    getId() {
+      return this.userData?.id ?? null
+    },
     getFirstName() {      
       return this.userData?.firstName ?? 'John Doe'
     },
@@ -23,6 +26,12 @@ const useAuthStore = defineStore('AuthStore', {
     },
     isAdminVerified() {
       return this.userData?.isAdminVerified ?? false
+    },
+    getPicture() {
+      return this.userData?.picture ?? null
+    },
+    getRole() {
+      return this.userData?.role ?? '[]'
     },
     getAccessToken() {
       return this.accessToken
@@ -55,8 +64,7 @@ const useAuthStore = defineStore('AuthStore', {
       this.userData = result.data
 
       let token = jwt_decode(this.accessToken)
-
-      console.log(token[ClaimTypes.Role])
+      localStorage.setItem('userAbilities', token[ClaimTypes.Role])
       
       return action(result)
     },

@@ -178,6 +178,7 @@ const onSignin = async () => {
 </style>
 
 <route lang="yaml">
-meta:
-  layout: blank
+  meta:
+    layout: blank
+    redirectIfLoggedIn: true
 </route>

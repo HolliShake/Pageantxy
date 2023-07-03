@@ -11,3 +11,10 @@ import ContestTable from '@/components/pageantxy/contests/ContestTable.vue'
     <ContestTable />
   </section>
 </template>
+
+<route lang="yaml">
+  meta:
+    subject: all
+    action: manage
+    requiresAuth: true
+</route>

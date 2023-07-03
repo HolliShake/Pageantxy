@@ -1,6 +1,7 @@
 import UserService from '@/services/UserService'
 import _ from 'lodash'
 import { defineStore } from "pinia"
+import action from './action'
 
 const userService = new UserService()
 
@@ -40,7 +41,7 @@ const useUserStore = defineStore('UserStore', {
     { 
       let user = null
         
-      if (this.candidates.length > 0)
+      if (this.users.length > 0)
         user = this.users.find(u => u.id == userId)
         
       else {
