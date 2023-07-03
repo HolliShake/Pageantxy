@@ -6,6 +6,7 @@ import useFileStore from '@/stores/file.store'
 import useUserStore from '@/stores/user.store'
 import NoImageAvailable from '@images/pageantxy/NoImageAvailable.png'
 import { nextTick, ref, watch } from 'vue'
+import DeleteUserModal from './DeleteUserModal.vue'
 
 const props = defineProps({
   modelValue: {
@@ -227,7 +228,13 @@ const onSubmit = async () => {
                 <VCol cols="12">
                   <VCardText class="pa-2">
                     <div class="demo-space-x justify-end">
+                      <DeleteUserModal :user-id="props.modelValue" />
+
                       <VBtn @click="onSubmit">
+                        <VIcon
+                          start
+                          icon="tabler-edit"
+                        />
                         Update
                       </VBtn>
                     </div>

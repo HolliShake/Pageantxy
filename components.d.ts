@@ -53,6 +53,7 @@ declare module '@vue/runtime-core' {
     DeleteCandidateModel: typeof import('./src/components/pageantxy/candidates/DeleteCandidateModel.vue')['default']
     DeleteContestModal: typeof import('./src/components/pageantxy/contests/DeleteContestModal.vue')['default']
     DeleteRegisterModal: typeof import('./src/components/pageantxy/register/DeleteRegisterModal.vue')['default']
+    DeleteUserModal: typeof import('./src/components/pageantxy/user/DeleteUserModal.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     EnableOneTimePasswordDialog: typeof import('./src/components/dialogs/EnableOneTimePasswordDialog.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']

@@ -1,48 +1,43 @@
 <script setup>
-import useContestStore from '@/stores/contest.store'
+import useUserStore from '@/stores/user.store'
+import { ref } from 'vue'
 
 const parameters = defineProps({
-  contestId: {
-    type: [Number, null],
+  userId: {
+    type: [String, null],
     required: true,
-  },
-  icon: {
-    type: Boolean,
-    default: true,
   },
 })
 
 const formState = ref({
-  contestName: '',
-  contestDescription: '',
-  contestOrder: 0,
-  weight: 0,
-  inputMin: 0,
-  inputMax: 0,
-  eventId: null,
-  isLocked: true,
-  isActive: false,
+  firstName: '',
+  lastName: '',
+  address: '',
+  userName: '',
+  email: '',
+  picture: '',
+  role: '',
+  isAdminVerified: false,
 })
 
-const isDialogVisible = ref(false)
-const contestStore = useContestStore()
-const refVForm = ref(null)
+const userStore = useUserStore()
+const refVForm = ref()
 const submitted = ref(false)
+const isDialogVisible = ref(false)
 
+watch(isDialogVisible, () => {
 
-watch(isDialogVisible, () => { 
-  if (!isDialogVisible.value || parameters.contestId <= 0) return
+  if (!isDialogVisible.value || parameters.userId <= 0) return console.log('returned')
 
-  // set
-  contestStore.getContestById(parameters.contestId)
-    .then(c => {
-      Object.assign(formState.value, c)
+  userStore.getUserById(parameters.userId)
+    .then(u => {
+      Object.assign(formState.value, u)
     })
-})
+}, { deep: true, immediate: true })
 
 const onSubmit = async () => {
 
-  contestStore.deleteContest(parameters.contestId)
+  userStore.deleteUser(parameters.userId)
     .then(() => { 
       isDialogVisible.value = false
       submitted.value = false
@@ -52,6 +47,7 @@ const onSubmit = async () => {
       })
     })
     .catch(() => submitted.value = false)
+  
 }
 </script>
 
@@ -76,10 +72,13 @@ const onSubmit = async () => {
       <VBtn
         v-else
         v-bind="props"
-        block
         color="error"
       >
-        Delete contest
+        <VIcon
+          start
+          icon="tabler-trash"
+        />
+        Delete user
       </VBtn>
     </template>
 
@@ -87,9 +86,9 @@ const onSubmit = async () => {
     <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
     <!-- Dialog Content -->
-    <VCard title="Delete contest">
+    <VCard title="Delete user?">
       <VCardText>
-        Confirm deletion of contest <strong>{{ formState.contestName }}</strong>?
+        Confirm deletion of <strong>{{ formState.lastName }}, {{ formState.firstName }}</strong> user?
       </VCardText>
 
       <VCardText class="d-flex justify-end gap-3 flex-wrap">

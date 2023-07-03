@@ -73,7 +73,7 @@ const onSubmit = async () => {
         v-else
         v-bind="props"
         block
-        color="success"
+        color="error"
       >
         Delete Candidate
       </VBtn>
