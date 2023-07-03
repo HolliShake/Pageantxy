@@ -5,6 +5,7 @@ import { resolveRoles } from '@/helpers/parseRole'
 import useUserStore from '@/stores/user.store'
 import { computed, watch } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
+import CreateUserModal from './CreateUserModal.vue'
 import UserControl from './UserControl.vue'
 
 const userStore = useUserStore()
@@ -103,6 +104,13 @@ const resolveStatusVariant = status => {
                 label="Filter status"
                 :items="availableFilter"
               />
+            </VCol>
+            <!--  -->
+            <VCol
+              cols="12"
+              md="4"
+            >
+              <CreateUserModal />
             </VCol>
           </VRow>
         </VCardText>

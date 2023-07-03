@@ -3,6 +3,7 @@ import AuthService from "@/services/AuthService"
 import jwt_decode from "jwt-decode"
 import { defineStore } from "pinia"
 import action from "./action"
+import useUserStore from './user.store'
 
 const authService = new AuthService()
 
@@ -67,6 +68,18 @@ const useAuthStore = defineStore('AuthStore', {
       localStorage.setItem('userAbilities', token[ClaimTypes.Role])
       
       return action(result)
+    },
+
+    async register(payload)
+    {
+      let newUser = await authService.register(payload)
+
+      if (newUser.SUCCESS)
+      {
+        useUserStore().appendUser(newUser.data)
+      }
+      
+      return action(newUser)
     },
         
   },

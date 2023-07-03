@@ -23,6 +23,11 @@ const useUserStore = defineStore('UserStore', {
 
   actions: {
 
+    async appendUser(user)
+    {
+      this.users.push(user)
+    },
+
     async fetchUsers()
     { 
       if (this.users.length > 0) return Promise.resolve(this.users)
