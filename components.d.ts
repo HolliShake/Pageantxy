@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Action: typeof import('./src/components/pageantxy/scoring/Action.vue')['default']
     ActiveSwitcher: typeof import('./src/components/pageantxy/contests/ActiveSwitcher.vue')['default']
     AddAuthenticatorAppDialog: typeof import('./src/components/dialogs/AddAuthenticatorAppDialog.vue')['default']
     AddEditAddressDialog: typeof import('./src/components/dialogs/AddEditAddressDialog.vue')['default']
@@ -37,6 +38,7 @@ declare module '@vue/runtime-core' {
     CardStatisticsVertical: typeof import('./src/@core/components/cards/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
     ConfirmDialog: typeof import('./src/components/dialogs/ConfirmDialog.vue')['default']
+    ContestHeader: typeof import('./src/components/pageantxy/contests/ContestHeader.vue')['default']
     ContestSwitcher: typeof import('./src/components/pageantxy/contests/ContestSwitcher.vue')['default']
     ContestTable: typeof import('./src/components/pageantxy/contests/ContestTable.vue')['default']
     CreateAppDialog: typeof import('./src/components/dialogs/CreateAppDialog.vue')['default']
@@ -66,6 +68,7 @@ declare module '@vue/runtime-core' {
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
     Notifications: typeof import('./src/@core/components/Notifications.vue')['default']
     PickImageInput: typeof import('./src/components/global/PickImageInput.vue')['default']
+    PostButton: typeof import('./src/components/pageantxy/scoring/PostButton.vue')['default']
     PricingPlanDialog: typeof import('./src/components/dialogs/PricingPlanDialog.vue')['default']
     ReferAndEarnDialog: typeof import('./src/components/dialogs/ReferAndEarnDialog.vue')['default']
     RegisteredCandidateTable: typeof import('./src/components/pageantxy/scoring/RegisteredCandidateTable.vue')['default']

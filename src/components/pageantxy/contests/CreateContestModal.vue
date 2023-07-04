@@ -1,7 +1,7 @@
 <script setup>
 import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import useContestStore from '@/stores/contest.store'
-import { integerValidator, requiredValidator } from '@core/utils/validators'
+import { betweenValidator, integerValidator, requiredValidator } from '@core/utils/validators'
 import { nextTick } from 'vue'
 
 const formState = ref({
@@ -132,7 +132,7 @@ const onSubmit = async () => {
               <VTextField
                 v-model="formState.contestOrder"
                 label="Contest order"
-                :rules="[requiredValidator, integerValidator]"
+                :rules="[requiredValidator, integerValidator, betweenValidator(formState.contestOrder, 1, 50)]"
               />
             </VCol>
             <VCol

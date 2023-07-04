@@ -2,18 +2,12 @@
 <script setup>
 import useRegisterStore from '@/stores/register.store'
 import { onMounted } from 'vue'
+import { VDataTable } from 'vuetify/labs/VDataTable'
+import Action from './Action.vue'
 
 const props = defineProps({
   contestId: {
     type: [Number, null],
-    required: true,
-  },
-  gender: {
-    type: String,
-    required: true,
-  },
-  candidateNumber: {
-    type: [Number, String, null],
     required: true,
   },
 })
@@ -24,8 +18,6 @@ const registeredCandidates = computed(() => {
   return registeredStore.getRegistered
     .sort((a, b) => (a.candidate.candidateNumber - b.candidate.candidateNumber))
     .filter(rc => rc.contestId == props.contestId)
-    .filter(rc => (props.candidateNumber == 'all') || rc.id == props.candidateNumber)
-    .filter(rc => (props.gender == 'all') || rc.candidate?.group == props.gender)
 })
 
 onMounted(() => {
@@ -36,56 +28,78 @@ const computedImage = picture => {
   return `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`
 }
 
+function truncate(name)
+{
+  if (name.trim().length >= 25)
+  {
+    // subtract 3
+    return name.trim().substring(0, 25 - 3) + '...'
+  }
+
+  return name.trim()
+}
+
+const headers = ref([
+  { title: '#', key: 'candidateNumber', width: '120', align: 'center' },
+  { title: 'CANDIDATE', key: 'candidate' },
+  { title: 'ACTION', key: 'action', align: 'center', minWidth: '230', width: '230' },
+])
+
 //
 </script>
 
 <template>
-  <VList rounded="0">
-    <VDivider v-if="registeredCandidates.length > 0" />
-    <VListItem
-      v-if="registeredCandidates.length <= 0"
-      class="px-0"
-    >
-      <VCardText
-        class="text-center"
-        style=" border-radius: 0 !important;background-color: rgb(var(--v-theme-background)) !important;"
-      >
-        No data available
-      </VCardText>
-    </VListItem>
-    <template
-      v-for="(reg, index) in registeredCandidates"
-      :key="index"
-    >
-      <VListItem>
-        <div class="d-flex flex-column flex-md-row flex-nowrap justify-space-center justify-space-md-start align-center pa-2">
-          <VAvatar
-            size="128"
-            rounded="lg"
-          >
-            <VImg
-              cover
-              :src="computedImage(reg.candidate.picture)"
-              width="128"
-              max-width="128"
-            />
-          </VAvatar>
-          <div class="d-flex flex-column ms-md-5 text-center text-md-start w-100 h-100">
+  <VDataTable
+    class="table-header-bg"
+    :headers="headers"
+    :items="registeredCandidates"
+    disable-pagination
+    :items-per-page="-1"
+  >
+    <!-- number -->
+    <template #item.candidateNumber="{ item }">
+      <strong class="text-h4"># {{ (item.raw.candidate.candidateNumber < 10) ? `0${item.raw.candidate.candidateNumber}` : item.raw.candidate.candidateNumber }}</strong>
+    </template>
+    <!-- candidate -->
+    <template #item.candidate="{ item }">
+      <div class="d-flex flex-row flex-nowrap align-center pa-2">
+        <VAvatar
+          size="64"
+          rounded="lg"
+        >
+          <VImg
+            cover
+            :src="computedImage(item.raw.candidate.picture)"
+            width="64"
+            max-width="64"
+          />
+        </VAvatar>
+        <div class="d-flex flex-column ms-md-5 w-100 h-100">
+          <div>
+            <span class="text-h3 font-weight-thin">
+              {{ truncate(`${item.raw.candidate.lastName}, ${item.raw.candidate.firstName}`) }}</span>
             <div>
-              <span class="text-h2 font-weight-thin">{{ reg.candidate.lastName }}, {{ reg.candidate.firstName }}</span>
-              <div>
-                <span>
-                  <strong class="text-h4">Candidate no # {{ (reg.candidate.candidateNumber < 10) ? `0${reg.candidate.candidateNumber}` : reg.candidate.candidateNumber }}</strong> |
-                  <span class="text-h5 text-disabled text-xs">{{ reg.candidate.representation }}</span>
+              <span>
+                <span class="text-h5 text-disabled text-xs font-weight-thin">
+                  <VIcon
+                    icon="tabler-map-pin"
+                    size="20"
+                  />
+                  {{ truncate(item.raw.candidate.representation) }}
                 </span>
-              </div>
+              </span>
             </div>
           </div>
         </div>
-      </VListItem>
-
-      <VDivider v-if="index < registeredCandidates.length -1" />
+      </div>
     </template>
-  </VList>
+    <!-- action -->
+    <template #item.action="{ item }">
+      <Action
+        :contest-id="props.contestId"
+        :candidate-id="item.raw.candidate.id"
+      />
+    </template>
+  </VDataTable>
 </template>
 

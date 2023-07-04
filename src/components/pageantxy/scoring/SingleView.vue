@@ -7,14 +7,6 @@ const props = defineProps({
     type: [Number, null],
     required: true,
   },
-  gender: {
-    type: String,
-    default: 'all',
-  },
-  candidateNumber: {
-    type: [Number, String, null],
-    required: true,
-  },
 })
 
 //
@@ -22,10 +14,6 @@ const props = defineProps({
 
 <template>
   <VCardText>
-    <LinearRegisteredList
-      :candidate-number="props.candidateNumber"
-      :gender="props.gender"
-      :contest-id="props.contestId"
-    />
+    <LinearRegisteredList :contest-id="props.contestId" />
   </VCardText>
 </template>
