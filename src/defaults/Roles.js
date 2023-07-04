@@ -1,6 +1,6 @@
 
 
 export default Object.freeze({
-  Admin: JSON.stringify([{ "subject": "all", "action": "manage" }]),
-  Judge: JSON.stringify([{ "subject": "Judge", "action": "manage" }]),
+  Admin: JSON.stringify([{ "subject": "Auth", action: "read" }, { "subject": "Admin", "action": "manage" }]),
+  Judge: JSON.stringify([{ "subject": "Auth", action: "read" }, { "subject": "Judge", "action": "edit" }, { "subject": "Judge", "action": "read" }]),
 })

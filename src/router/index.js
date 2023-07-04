@@ -1,4 +1,5 @@
 import { canNavigate } from '@/@layouts/plugins/casl'
+import { isAdmin } from '@/plugins/casl/util'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
@@ -11,33 +12,35 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(route => {
+router.beforeEach((to, from, next) => {
 
   const userLoggedIn = isUserLoggedIn()
 
-  if (canNavigate(route)) {
+  console.log('IsLoggedIn: ', userLoggedIn)
+  console.log(canNavigate(to), '>>>>>>', to.fullPath)
 
-    if (route.meta.redirectIfLoggedIn && userLoggedIn)
-    { 
-      return '/dashboard'
-    }
+  if (userLoggedIn)
+  {
+    if (to.name == 'login' && to.meta.redirectIfLoggedIn) {
 
-    if (route.meta.requiresAuth && !userLoggedIn)
-    { 
-      return { path: 'notfound' }
+      if (isAdmin())
+        next({ name: 'dashboard' })
+      else
+        next({ name: 'scoring' })
+
+    } else {
+      if (canNavigate(to)) {
+        next()
+      } else {
+        next({ name: 'notfound' })
+      }
     }
-    
   } else {
-    if (userLoggedIn)
-    {      
-      return { path: 'notfound' }
-    }
+    if (to.name == 'login' && !isUserLoggedIn)
+      next({ name: 'login', query: { to: to.name != "login" ? to.fullPath : undefined } })
     else
-    { 
-      return { name: 'login', query: { to: route.name != "index" ? route.fullPath : undefined } }
-    }
+      next()
   }
-
 })
 
 

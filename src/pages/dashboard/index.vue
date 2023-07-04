@@ -22,7 +22,7 @@ import UserTable from '@/components/pageantxy/user/UserTable.vue'
 
 <route lang="yaml">
   meta:
-    subject: all
+    subject: Admin
     action: manage
     requiresAuth: true
 </route>

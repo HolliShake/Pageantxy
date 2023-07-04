@@ -4,8 +4,10 @@ import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import useContestStore from '@/stores/contest.store'
 import { computed } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
+import ActiveSwitcher from './ActiveSwitcher.vue'
 import CreateContestModal from './CreateContestModal.vue'
 import DeleteContestModal from './DeleteContestModal.vue'
+import LockSwitcher from './LockSwitcher.vue'
 import UpdateContestModal from './UpdateContestModal.vue'
 
 const availableFilter = ref([
@@ -55,12 +57,12 @@ const headers = ref([
     key: 'contestOrder',
   },
   {
-    title: 'STATUS',
-    key: 'status',
+    title: 'LOCK',
+    key: 'lock',
   },
   {
-    title: 'CONTEST STATUS',
-    key: 'contestStatus',
+    title: 'ACTIVE',
+    key: 'active',
   },
   {
     title: 'ACTION',
@@ -161,15 +163,13 @@ const resolveContestStausVariant = status => {
                 {{ resolveStatusVariant(item.raw.isLocked).text }}
               </VChip>
             </template>
-            
-            <!-- contest status -->
-            <template #item.contestStatus="{ item }">
-              <VChip
-                :color="resolveContestStausVariant(item.raw.isActive).color"
-                size="small"
-              >
-                {{ resolveContestStausVariant(item.raw.isActive).text }}
-              </VChip>
+            <!-- lock -->
+            <template #item.lock="{ item }">
+              <LockSwitcher :contest-id="item.raw.id" />
+            </template>
+            <!-- active -->
+            <template #item.active="{ item }">
+              <ActiveSwitcher :contest-id="item.raw.id" />
             </template>
             <!-- action -->
             <template #item.action="{ item }">

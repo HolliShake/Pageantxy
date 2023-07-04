@@ -13,8 +13,8 @@ import CandidateTable from '@/components/pageantxy/candidates/CandidateTable.vue
 
 <route lang="yaml">
   meta:
-    subject: all
-    action: manage
+    subject: Admin
+    action: read
     requiresAuth: true
 </route>
 

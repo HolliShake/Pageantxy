@@ -14,6 +14,10 @@ const props = defineProps({
     type: [String, null],
     required: true,
   },
+  includeControl: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const formState = ref({
@@ -41,8 +45,6 @@ watch(props, () => {
   userStore.getUserById(props.modelValue)
     .then(u => {
       Object.assign(formState.value, u)
-
-      console.log('>>>>>>>', u)
     })
 }, { deep: true, immediate: true })
 
@@ -133,7 +135,7 @@ const onSubmit = async () => {
             height="100%"
           >
             <VCardText
-              class="h-100"
+              class="h-100 text-center"
               style="background-color: rgb(var(--v-theme-background));"
             >
               <VAvatar
@@ -231,9 +233,15 @@ const onSubmit = async () => {
                 <VCol cols="12">
                   <VCardText class="pa-2">
                     <div class="demo-space-x justify-end">
-                      <VerifyUserModal :user-id="props.modelValue" />
+                      <VerifyUserModal
+                        v-if="props.includeControl"
+                        :user-id="props.modelValue"
+                      />
 
-                      <DeleteUserModal :user-id="props.modelValue" />
+                      <DeleteUserModal
+                        v-if="props.includeControl"
+                        :user-id="props.modelValue"
+                      />
 
                       <VBtn @click="onSubmit">
                         <VIcon

@@ -1,27 +1,28 @@
 
 
 
-export default Object.freeze([
+export default ([
   {
     title: 'Dashboard',
     to: { name: 'dashboard' },
     icon: { icon: 'tabler-layout-dashboard' },
-    subject: 'all',
-    action: 'manage',
+    subject: 'Admin',
+    action: 'read',
+    hidden: true,
   },
   {
     title: 'Candidates',
     to: { name: 'candidates' },
     icon: { icon: 'tabler-users-group' },
-    subject: 'all',
-    action: 'manage',
+    subject: 'Admin',
+    action: 'read',
   },
   {
     title: 'Registration',
     to: { name: 'register' },
     icon: { icon: 'tabler-square-rounded-plus' },
-    subject: 'all',
-    action: 'manage',
+    subject: 'Admin',
+    action: 'read',
   },
   {
     title: 'Miscs',
@@ -31,22 +32,22 @@ export default Object.freeze([
         title: 'Contests',
         to: { name: 'miscs-contests' },
         icon: { icon: 'tabler-barbell' },
-        subject: 'all',
-        action: 'manage',
+        subject: 'Admin',
+        action: 'read',
       },
       {
         title: 'Users',
         to: { name: 'miscs-users' },
         icon: { icon: 'tabler-users-group' },
-        subject: 'all',
-        action: 'manage',
+        subject: 'Admin',
+        action: 'read',
       },
       {
         title: 'Logs',
         to: { name: 'miscs-logs' },
         icon: { icon: 'tabler-info-square-rounded' },
-        subject: 'all',
-        action: 'manage',
+        subject: 'Admin',
+        action: 'read',
       },
     ],
   },

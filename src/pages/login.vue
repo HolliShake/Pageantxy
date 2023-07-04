@@ -38,7 +38,6 @@ const onSignin = async () => {
       .then(user => {
 
         let abilities = JSON.parse(localStorage.getItem('userAbilities'))
-
         if (!abilities) router.push({ name: 'logout' })
 
         let isAdmin = !(!Array.from(new Set(abilities.map(a => a.subject)))

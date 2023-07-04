@@ -1,9 +1,9 @@
 <script setup>
-import SelectActiveContest from '@/components/pageantxy/contests/SelectActiveContest.vue'
 import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import useRegisterStore from '@/stores/register.store'
 import { onMounted } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
+import SelectContest from '../contests/SelectContest.vue'
 import CreateRegisterModal from './CreateRegisterModal.vue'
 import DeleteRegisterModal from './DeleteRegisterModal.vue'
 import UpdateRegisterModal from './UpdateRegisterModal.vue'
@@ -16,6 +16,7 @@ const registered = computed(() => registerStore.getRegistered)
 
 const filteredRegistered = computed(() => { 
   return registered.value
+    .sort((a, b) => a.candidate.candidateNumber - b.candidate.candidateNumber)
     .filter(r => r.contest.eventId == selectedEvent.value)
     .filter(r => r.contestId == selectedContest.value)
 })
@@ -66,7 +67,7 @@ const computedImage = picture => {
               cols="12"
               md="4"
             >
-              <SelectActiveContest
+              <SelectContest
                 v-model="selectedContest"
                 :event-id="selectedEvent"
               />

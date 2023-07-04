@@ -8,7 +8,7 @@
 
 <route lang="yaml">
   meta:
-    subject: all
+    subject: Admin
     action: manage
     requiresAuth: true
 </route>

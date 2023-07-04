@@ -13,7 +13,7 @@ import RegisterTable from '@/components/pageantxy/register/RegisterTable.vue'
 
 <route lang="yaml">
   meta:
-    subject: all
+    subject: Admin
     action: manage
     requiresAuth: true
 </route>

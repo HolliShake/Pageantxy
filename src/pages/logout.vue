@@ -21,4 +21,9 @@ router.push({ name: 'login' })
   <h1>Logging out...</h1>
 </template>
 
-
+<route lang="yaml">
+  meta:
+    layout: blank
+    subject: Auth
+    action: read
+</route>

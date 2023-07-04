@@ -14,7 +14,7 @@ import ContestTable from '@/components/pageantxy/contests/ContestTable.vue'
 
 <route lang="yaml">
   meta:
-    subject: all
+    subject: Admin
     action: manage
     requiresAuth: true
 </route>

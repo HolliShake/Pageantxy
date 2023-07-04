@@ -12,7 +12,7 @@ import UserTableControl from '@/components/pageantxy/user/UserTableControl.vue'
 
 <route lang="yaml">
   meta:
-    subject: all
+    subject: Admin
     action: manage
     requiresAuth: true
 </route>

@@ -10,13 +10,16 @@ const authStore = useAuthStore()
 
 <template>
   <section>
-    <UserControl v-model="authStore.getId" />
+    <UserControl
+      v-model="authStore.getId"
+      :include-control="false"
+    />
   </section>
 </template>
 
 <route lang="yaml">
   meta:
     subject: Auth
-    action: manage
+    action: read
     requiresAuth: true
 </route>
