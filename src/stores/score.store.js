@@ -22,8 +22,23 @@ const useScoreStore = defineStore('Score', {
   },
 
   actions: {
+
+    async fetchAllScoresByJudgeId(judgeId) {
+        
+      if (this.scores.length > 0) return Promise.resolve(this.scores)
+          
+      let result = await scoreService.getAllByJudgeId(judgeId)
+          
+      if (result.FAIL) return Promise.resolve([])
+
+      this.scores = result.data
+      this.loaded = true
       
-    async fetchAllScores(scoreId) {
+      return Promise.resolve(this.scores)
+          
+    },
+      
+    async fetchAllScores() {
         
       if (this.scores.length > 0) return Promise.resolve(this.scores)
           
@@ -72,6 +87,16 @@ const useScoreStore = defineStore('Score', {
 
       if (result.SUCCESS)
         _.merge(this.scores.find(s => s.id == scoreId), score)
+      
+      return action(result)
+    },
+
+    async deleteScore(scoreId)
+    {
+      let result = await scoreService.delete(scoreId)
+
+      if (result.SUCCESS)
+        this.scores = this.scores.filter(s => s.id != scoreId)
       
       return action(result)
     },

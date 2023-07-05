@@ -1,4 +1,9 @@
 <script setup>
+import useAuthStore from '@/stores/auth.store'
+import useContestStore from '@/stores/contest.store'
+import useLogStore from '@/stores/log.store'
+import { watch } from 'vue'
+
 const parameters = defineProps({
   contestId: {
     type: [Number, null],
@@ -6,20 +11,64 @@ const parameters = defineProps({
   },
 })
 
+const contestData = ref({
+  contestName: '',
+  contestDescription: '',
+  contestOrder: 0,
+  weight: 0,
+  inputMin: 0,
+  inputMax: 0,
+  eventId: 0,
+  isLocked: true,
+  isActive: true,
+})
+
+
+const authStore = useAuthStore()
+const logStore = useLogStore()
+const contestStore = useContestStore()
+const submitted = ref(false)
 
 const isDialogVisible = ref(false)
 
+const hasPosted = computed(() => {
+  return !(!(logStore.getLogs
+    .find(l => (l.contestId == parameters.contestId) && (l.userId == authStore.getId)) ?? null))
+})
 
-watch(isDialogVisible, () => { 
-  if (!isDialogVisible.value || parameters.registerId <= 0) return
+watch(parameters, () => { 
 
+  if (parameters.contestId <= 0) return
 
-}, { deep: true })
+  // get
+  contestStore.getContestById(parameters.contestId)
+    .then(c => {
+      Object.assign(contestData.value, c)
+    })
+  
+}, { deep: true, immediate: true })
 
 const onSubmit = async () => {
 
+  if (submitted.value) return
+
+  submitted.value = true
+
+  logStore.createLog({
+    userId: authStore.getId,
+    contestId: parameters.contestId,
+  })
+    .then(log => {
+      submitted.value = false
+      isDialogVisible.value = false
+    })
+    .catch(() => submitted.value = false)
   
 }
+
+onMounted(() => {
+  logStore.fetchAllLogsByJudgeId(authStore.getId)
+})
 </script>
 
 <template>
@@ -34,6 +83,7 @@ const onSubmit = async () => {
       <VBtn
         v-bind="props"
         block
+        :disabled="contestData.isLocked || hasPosted"
       >
         POST
       </VBtn>

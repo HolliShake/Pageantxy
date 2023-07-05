@@ -126,6 +126,7 @@ onMounted(() => {
         <VTextField
           class="ms-2"
           readonly
+          chips
           :model-value="computedDisplay"
           :rules="[requiredValidator]"
         />

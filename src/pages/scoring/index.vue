@@ -25,6 +25,7 @@ import RegisteredCandidateTable from '@/components/pageantxy/scoring/RegisteredC
 
 <route lang="yaml">
   meta:
+    layout: judge
     subject: Judge
     action: read
     requiresAuth: true

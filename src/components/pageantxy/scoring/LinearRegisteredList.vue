@@ -41,8 +41,7 @@ function truncate(name)
 
 const headers = ref([
   { title: '#', key: 'candidateNumber', width: '120', align: 'center' },
-  { title: 'CANDIDATE', key: 'candidate' },
-  { title: 'ACTION', key: 'action', align: 'center', minWidth: '230', width: '230' },
+  { title: 'CANDIDATE', key: 'candidate', width: '1200' },
 ])
 
 //
@@ -50,7 +49,7 @@ const headers = ref([
 
 <template>
   <VDataTable
-    class="table-header-bg"
+    class="linear-table table-header-bg"
     :headers="headers"
     :items="registeredCandidates"
     disable-pagination
@@ -62,7 +61,7 @@ const headers = ref([
     </template>
     <!-- candidate -->
     <template #item.candidate="{ item }">
-      <div class="d-flex flex-row flex-nowrap align-center pa-2">
+      <div class="d-flex flex-row flex-nowrap flex-shrink-0 align-center pa-2">
         <VAvatar
           size="64"
           rounded="lg"
@@ -74,32 +73,38 @@ const headers = ref([
             max-width="64"
           />
         </VAvatar>
-        <div class="d-flex flex-column ms-md-5 w-100 h-100">
-          <div>
-            <span class="text-h3 font-weight-thin">
-              {{ truncate(`${item.raw.candidate.lastName}, ${item.raw.candidate.firstName}`) }}</span>
+        <div class="d-flex flex-row align-center w-100 h-100">
+          <div class="d-flex flex-nowrap flex-row flex-shrink-0 shrink-0 ms-md-5">
             <div>
-              <span>
-                <span class="text-h5 text-disabled text-xs font-weight-thin">
-                  <VIcon
-                    icon="tabler-map-pin"
-                    size="20"
-                  />
-                  {{ truncate(item.raw.candidate.representation) }}
+              <span class="text-h3 font-weight-thin">
+                {{ truncate(`${item.raw.candidate.lastName}, ${item.raw.candidate.firstName}`) }}</span>
+              <div>
+                <span>
+                  <span class="text-h5 text-disabled text-xs font-weight-thin">
+                    <VIcon
+                      icon="tabler-map-pin"
+                      size="20"
+                    />
+                    {{ truncate(item.raw.candidate.representation) }}
+                  </span>
                 </span>
-              </span>
+              </div>
             </div>
           </div>
+
+          <VSpacer />
+          <Action
+            :contest-id="props.contestId"
+            :candidate-id="item.raw.candidate.id"
+          />
         </div>
       </div>
-    </template>
-    <!-- action -->
-    <template #item.action="{ item }">
-      <Action
-        :contest-id="props.contestId"
-        :candidate-id="item.raw.candidate.id"
-      />
     </template>
   </VDataTable>
 </template>
 
+<style lang="scss">
+div.v-table__wrapper {
+  overflow-y: hidden;
+}
+</style>

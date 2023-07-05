@@ -65,6 +65,14 @@ const useContestStore = defineStore('Contest', {
       return action(result)
     },
 
+    async setContest(contest)
+    {
+      let result = await this.contests.find(c => c.id == contest.id)
+      if (!result) return
+
+      _.merge(result, contest)
+    },
+
     async updateContest(contestId, contest)
     {
       let result = await contestService.update(contestId, contest)

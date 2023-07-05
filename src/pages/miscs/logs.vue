@@ -1,8 +1,13 @@
 
+<script setup>
+import LogTable from '@/components/pageantxy/logs/LogTable.vue'
+
+//
+</script>
 
 <template>
   <section>
-    <h1>Coming soon!</h1>
+    <LogTable />
   </section>
 </template>
 

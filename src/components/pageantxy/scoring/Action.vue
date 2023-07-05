@@ -1,6 +1,7 @@
 <script setup>
 import useAuthStore from '@/stores/auth.store'
 import useContestStore from '@/stores/contest.store'
+import useLogStore from '@/stores/log.store'
 import useScoreStore from '@/stores/score.store'
 import { betweenValidator, requiredValidator } from '@core/utils/validators'
 import { computed, onMounted, watch } from 'vue'
@@ -18,6 +19,7 @@ const props = defineProps({
 
 const authStore = useAuthStore()
 const scoreStore = useScoreStore()
+const logStore = useLogStore()
 const contestStore = useContestStore()
 
 // score
@@ -45,8 +47,15 @@ const contestData = ref({
   inputMax: 0,
   eventId: 0,
   isLocked: true,
-  isActive: true,
+  isActive: false,
 })
+
+
+const hasPosted = computed(() => {
+  return !(!(logStore.getLogs
+    .find(l => (l.contestId == props.contestId) && (l.userId == authStore.getId)) ?? null))
+})
+
 
 watch(scoreStore, () => { 
 
@@ -57,14 +66,19 @@ watch(scoreStore, () => {
     scoreId.value = score.id
     Object.assign(formState.value, score)
   }
+  
+}, { deep: true, immediate: true })
 
+watch(props, () => {
+  
+  if (props.contestId <= 0) return
+  
+  // get
   contestStore.getContestById(props.contestId)
     .then(c => {
       Object.assign(contestData.value, c)
     })
-  
 }, { deep: true, immediate: true })
-
 
 const onSubmit = async () => { 
 
@@ -94,22 +108,37 @@ const onSubmit = async () => {
 }
 
 onMounted(() => {
-  scoreStore.fetchAllScores()
+  scoreStore.fetchAllScoresByJudgeId(authStore.getId)
+  logStore.fetchAllLogsByJudgeId(authStore.getId)
 })
 
 //
 </script>
 
 <template>
-  <div class="demo-space-x flex-nowrap">
+  <VProgressCircular
+    v-if="!(scoreLoaded || contestLoaded)"
+    indeterminate
+  />
+  
+  <div
+    v-if="((contestData.isActive && !contestData.isLocked) && !hasPosted)"
+    class="demo-space-x flex-nowrap"
+  >
     <VTextField
       v-model="formState.scoreValue"
       type="number"
       :rules="[requiredValidator, betweenValidator(formState.scoreValue, contestData.inputMin, contestData.inputMax)]"
     /> 
     <VBtn @click="onSubmit">
-      {{ (scoreId == null) ? 'SAVE' : 'EDIT' }}
+      {{ (!scoreLoaded) ? '...' : ((scoreId == null) ? 'SAVE' : 'EDIT') }}
     </VBtn>
   </div>
+  <ScoreValue
+    v-else
+    :score="formState.scoreValue"
+    :min="contestData.inputMin"
+    :max="contestData.inputMax"
+  />
 </template>
 

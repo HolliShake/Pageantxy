@@ -3,7 +3,7 @@
 import { avatarText } from '@/@core/utils/formatters'
 import { resolveRoles } from '@/helpers/parseRole'
 import useUserStore from '@/stores/user.store'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 
 const userStore = useUserStore()
@@ -38,9 +38,6 @@ onMounted(() => {
   userStore.fetchUsers()
 })
 
-watch(userList, () => { 
-  console.log(userList.value)
-}, { deep: true })
 
 const resolveStatusVariant = status => {
   if (status)

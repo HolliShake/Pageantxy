@@ -3,7 +3,7 @@ import GenericService from "./GenericService"
 
 
 
-class ScoreService extends GenericService
+class LogService extends GenericService
 {
   constructor() {
     super()
@@ -18,9 +18,6 @@ class ScoreService extends GenericService
         return this.fail(err.response?.data)
       })
   }
-
 }
 
-
-export default ScoreService
-
+export default LogService

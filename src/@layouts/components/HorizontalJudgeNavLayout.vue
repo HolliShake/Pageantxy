@@ -1,7 +1,6 @@
 <script setup>
 import { useLayouts } from '@layouts/composable/useLayouts'
 
-import { HorizontalNav } from '@layouts/components'
 
 // import { useLayouts } from '@layouts'
 
@@ -46,12 +45,6 @@ const {
         </div>
       </div>
       <!-- 👉 Navigation -->
-      
-      <div class="layout-horizontal-nav">
-        <div class="horizontal-nav-content-container">
-          <HorizontalNav :nav-items="navItems" />
-        </div>
-      </div>
     </div>
 
     <main class="layout-page-content">
