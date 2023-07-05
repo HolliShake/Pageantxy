@@ -58,8 +58,12 @@ contestR.listen('RecievedUpdate', contest => {
             <span class="d-block ms-1 text-sm text-disabled font-weight-bold">{{ contest ?.weight ?? 0 }}%</span>
           </div>
           
-          <!--  -->
-          <div class="ms-2 d-flex flex-nowrap flex-row align-center">
+          <VDivider
+            vertical
+            class="mx-2"
+          />
+
+          <div class="d-flex flex-nowrap flex-row align-center">
             <VAvatar
               variant="tonal"
               color="primary"
@@ -78,8 +82,13 @@ contestR.listen('RecievedUpdate', contest => {
             <span class="d-block ms-1 text-sm text-disabled font-weight-bold">{{ contest ?.inputMin ?? 0 }}</span>
           </div>
 
+          <VDivider
+            vertical
+            class="mx-2"
+          />
+
           <!--  -->
-          <div class="ms-2 d-flex flex-nowrap flex-row align-center">
+          <div class="d-flex flex-nowrap flex-row align-center">
             <VAvatar
               variant="tonal"
               color="error"

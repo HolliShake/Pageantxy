@@ -7,6 +7,11 @@ import RegisterTable from '@/components/pageantxy/register/RegisterTable.vue'
 
 <template>
   <section>
+    <VRow>
+      <VCol cols="12">
+        <ContestHeader />
+      </VCol>
+    </VRow>
     <RegisterTable />
   </section>
 </template>
