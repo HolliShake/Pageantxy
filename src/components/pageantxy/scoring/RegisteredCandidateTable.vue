@@ -24,7 +24,8 @@ const eventStore = useEventStore()
 const selectedEvent = ref(null)
 
 const scores = ref([])
-const listScore= provide('scores', scores)
+
+provide('scores', scores)
 
 onMounted(() => {
   eventStore.fetchEvents()

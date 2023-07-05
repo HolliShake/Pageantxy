@@ -55,9 +55,17 @@ contestR.listen('RecievedUpdate', contest => {
   <VCard>
     <VCardText>
       <div class="d-flex flex-row flex-nowrap justify-space-between align-center w-100">
-        <h1 class="text-disabled text-uppercase">
-          | {{ contest ?.contestName ?? 'No Available Contest' }}
-        </h1>
+        <div class="d-flex flex-row flex-nowrap align-center">
+          <span class="text-sm text-disabled">contest</span>
+
+          <div class="mx-1 text-error">
+            |
+          </div>
+
+          <h3 class="text-warning text-uppercase font-weight-thin">
+            {{ contest ?.contestName ?? 'No Available Contest' }}
+          </h3>
+        </div>
 
         <span
           class="d-flex flex-row flex-nowrap pa-2"
