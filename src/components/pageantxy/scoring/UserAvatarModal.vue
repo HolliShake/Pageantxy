@@ -8,9 +8,7 @@ const parameters = defineProps({
 
 const isDialogVisible = ref(false)
 
-const computedImage = picture => {
-  console.log('>>', `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`)
-  
+const computedImage = picture => {  
   return `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`
 }
 </script>

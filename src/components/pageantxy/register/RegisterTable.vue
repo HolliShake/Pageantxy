@@ -21,10 +21,6 @@ const filteredRegistered = computed(() => {
     .filter(r => r.contestId == selectedContest.value)
 })
 
-watch(registered, () => {
-  console.log(registered.value)
-}, { deep: true })
-
 onMounted(() => {
   registerStore.fetchRegistered()
 })
@@ -76,7 +72,10 @@ const computedImage = picture => {
               cols="12"
               md="4"
             >
-              <CreateRegisterModal :event-id="selectedEvent" />
+              <CreateRegisterModal
+                :event-id="selectedEvent"
+                :contest-id="selectedContest"
+              />
             </VCol>
           </VRow>
         </VCardText>

@@ -1,20 +1,19 @@
 <script setup>
 import SelectCandidate from '@/components/pageantxy/candidates/SelectCandidate.vue'
 import useRegisterStore from '@/stores/register.store'
-import { nextTick } from 'vue'
-import GenericSelectContest from '../contests/GenericSelectContest.vue'
 
 const parameters = defineProps({
   eventId: {
     type: [Number, null],
     required: true,
   },
+  contestId: {
+    type: [Number, null],
+    required: true,
+  },
 })
 
-const formState = ref({
-  candidateId: null,
-  contestId: null,
-})
+const candidates = ref([])
 
 const isDialogVisible = ref(false)
 const registerStore = useRegisterStore()
@@ -29,16 +28,14 @@ const onSubmit = async () => {
 
   if (await refVForm.value.validate())
   {
-    registerStore.createRegistered(formState.value)
-      .then(() => { 
-        isDialogVisible.value = false
-        submitted.value = false
-        nextTick(() => {
-          refVForm.value?.reset()
-          refVForm.value.resetValidation()
+    candidates.value.forEach(cId => { 
+      registerStore.createRegistered({ contestId: parameters.contestId, candidateId: cId })
+        .then(() => { 
+          isDialogVisible.value = false
+          submitted.value = false
         })
-      })
-      .catch(() => submitted.value = false)
+        .catch(() => submitted.value = false)
+    })
   }
   else
   {
@@ -79,14 +76,7 @@ const onSubmit = async () => {
         <VForm ref="refVForm">
           <VRow>
             <VCol cols="12">
-              <GenericSelectContest
-                v-model="formState.contestId"
-                :event-id="parameters.eventId"
-                is-required
-              />
-            </VCol>
-            <VCol cols="12">
-              <SelectCandidate v-model="formState.candidateId" />
+              <SelectCandidate v-model="candidates" />
             </VCol>
           </VRow>
         </VForm>

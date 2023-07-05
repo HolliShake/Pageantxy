@@ -1,5 +1,4 @@
 import { canNavigate } from '@/@layouts/plugins/casl'
-import { isAdmin } from '@/plugins/casl/util'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
@@ -15,6 +14,31 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 
   const userLoggedIn = isUserLoggedIn()
+
+  if (userLoggedIn)
+  {
+    if (canNavigate(to)) {
+      next()
+    } else {
+      if (from.name == 'login' && ['dashboard', 'scoring'].includes(to.name))
+        next()
+      else
+        next({ name: 'notfound' })
+    }
+    
+  } else {
+    // Not loggedin
+    if (to.name == 'login' && (to.meta.requiresAuth && !isUserLoggedIn))
+      next({ name: 'login', query: { to: to.name != "login" ? to.fullPath : undefined } })
+    else
+      next()
+  }
+ 
+})
+
+/*
+
+ const userLoggedIn = isUserLoggedIn()
 
   console.log('IsLoggedIn: ', userLoggedIn)
   console.log(canNavigate(to), '>>>>>>', to.fullPath)
@@ -41,8 +65,8 @@ router.beforeEach((to, from, next) => {
     else
       next()
   }
-})
 
+*/
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 export default router

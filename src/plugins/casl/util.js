@@ -13,5 +13,6 @@ export function isAdmin()
   const abilities = JSON.parse(localStorage.getItem('userAbilities'))
   
   return !(!Array.from(new Set(abilities.map(a => a.subject)))
-    .find(subject => subject == 'all' || subject.toLowerCase() == 'admin'))
+    .find(subject => subject.toLowerCase() == 'all' || subject.toLowerCase() == 'admin'))
 }
+

@@ -9,8 +9,8 @@ import { computed, onMounted, watch } from 'vue'
 
 const parameters = defineProps({
   modelValue: {
-    type: [Number, null],
-    default: null,
+    type: Array,
+    default: () => [],
   },
 })
 
@@ -27,10 +27,11 @@ const contestStore = useContestStore()
 const candidateStore = useCandidateStore()
 const registerStore = useRegisterStore()
 
+
+const choosenCandidate = ref([])
+
 const candidates = computed(() => {
-
   return candidateStore.getCandidates
-
 })
 
 const searchQuery = ref('')
@@ -53,35 +54,33 @@ const filteredCandidates = computed(() => {
 
 })
 
+watch(isDialogVisible, () => { 
+  if (isDialogVisible.value) choosenCandidate.value = []
+}, { deep: true })
+
+watch(choosenCandidate, () => { 
+  emit('update:modelValue', choosenCandidate.value)
+}, { deep: true })
 
 watch(rowPerPage, () => { 
   totalPage.value = (rowPerPage.value != 'all') ? Math.ceil(candidates.value.length / rowPerPage.value) : 1
 }, { deep: true, immediate: true })
 
 
-watch(selectedCandidate, () => {
-
-  if (selectedCandidate.value != null)
-  {
-    emit('update:modelValue', selectedCandidate.value)
-    isDialogVisible.value = false
-  }
-  
-}, { deep: true, immediate: true })
-
-watch(parameters, () => {
-  if (parameters.modelValue == null) return
-
-  selectedCandidate.value = parameters.modelValue
-
-}, { deep: true, immediate: true })
-
 const computedDisplay = computed(() => {
-  let candidate = filteredCandidates.value.find(c => c.id == selectedCandidate.value)
+  let candidates = []
 
-  if (!candidate) return ''
+  choosenCandidate.value.forEach(cc => {
 
-  return `${candidate.lastName}, ${candidate.firstName}`
+    let can = filteredCandidates.value.find(c => c.id == cc)
+
+    if (can)
+      candidates.push(
+        `#${can.candidateNumber} - ${can.lastName}, ${can.firstName}`,
+      )
+  })
+
+  return candidates
 })
 
 onMounted(() => { 
@@ -89,6 +88,21 @@ onMounted(() => {
   candidateStore.fetchCandidates()
   registerStore.fetchRegistered()
 })
+
+
+function handleCheck(candidateId)
+{
+  if (choosenCandidate.value.includes(candidateId))
+    choosenCandidate.value.filter(cc => cc != candidateId)
+  else
+    choosenCandidate.value.push(candidateId)
+}
+
+function handleClose()
+{
+  isDialogVisible.value = !isDialogVisible.value
+  choosenCandidate.value = []
+}
 </script>
 
 <template>
@@ -105,18 +119,19 @@ onMounted(() => {
           Select
         </VBtn>
 
-        <VTextField
+        <VSelect
           class="ms-2"
           readonly
           chips
           :model-value="computedDisplay"
+          multiple
           :rules="[requiredValidator]"
         />
       </div>
     </template>
 
     <!-- Dialog close btn -->
-    <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+    <DialogCloseBtn @click="handleClose" />
 
     <!-- Dialog Content -->
     <VCard title="Select a candidate">
@@ -124,7 +139,7 @@ onMounted(() => {
         <VRow>
           <VCol
             cols="12"
-            md="8"
+            md="6"
           >
             <VTextField
               v-model="searchQuery"
@@ -140,6 +155,17 @@ onMounted(() => {
               label="Group"
               :items="availableGroups"
             />
+          </VCol>
+          <VCol
+            cols="12"
+            md="2"
+          >
+            <VBtn
+              block
+              @click="isDialogVisible = false"
+            >
+              SELECT
+            </VBtn>
           </VCol>
         </VRow>
       </VCardText>
@@ -157,6 +183,13 @@ onMounted(() => {
             <VListItem>
               <div class="d-flex flex-nowrap flex-row pa-1">
                 <div class="d-flex flex-row flex-nowrap align-center">
+                  <div class="pa-2">
+                    <VCheckbox
+                      :model-value="choosenCandidate.includes(candidate.id)"
+                      @change="handleCheck(candidate.id)"
+                    />
+                  </div>
+
                   <VAvatar
                     :size="40"
                     variant="tonal"
@@ -174,15 +207,6 @@ onMounted(() => {
                 </div>
                  
                 <VSpacer />
-
-                <div class="demo-space-x flex-nowrap flex-shrink-0">
-                  <VBtn
-                    size="x-small"
-                    @click="selectedCandidate = candidate.id"
-                  >
-                    SELECT
-                  </VBtn>
-                </div>
               </div>
             </VListItem>
             <VDivider v-if="index < filteredCandidates.length - 1" />
