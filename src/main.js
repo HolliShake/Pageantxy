@@ -11,13 +11,14 @@ import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp, markRaw, watch } from 'vue'
 import ability from './plugins/casl/ability'
+import useSnackBar from './stores/snackbar.store'
 
 loadFonts()
 
 
 // Create vue app
-const app = createApp(App)
 const piniaState = createPinia()
+const app = createApp(App)
 
 piniaState.use(({ store }) => {
   store.$router = markRaw(router)
@@ -40,6 +41,8 @@ app.use(layoutsPlugin)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
+
+app.provide('useSnackbar', () => useSnackBar())
 
 // Mount vue app
 app.mount('#app')

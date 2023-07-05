@@ -2,7 +2,6 @@
 import { requiredValidator } from '@/@core/utils/validators'
 import Group from '@/defaults/Group'
 import availablePages from '@/defaults/availablePages'
-import currentEvent from '@/helpers/currentEvent'
 import useCandidateStore from '@/stores/candidate.store'
 import useContestStore from '@/stores/contest.store'
 import useRegisterStore from '@/stores/register.store'
@@ -29,26 +28,9 @@ const candidateStore = useCandidateStore()
 const registerStore = useRegisterStore()
 
 const candidates = computed(() => {
-  // Find current event
-  const event = currentEvent()
 
-  // Filter contests by currentEvent
-  const contest = contestStore.getContests.find(c => (c.eventId == event?.id) && c.isActive) ?? null
+  return candidateStore.getCandidates
 
-  if ((!event) || !contest)
-    return candidateStore.getCandidates
-
-  // Mag select ta sa previous contest
-  const previousContest = contestStore.getContests.find(c => (c.eventId == event?.id) && (c.contestOrder == (contest.contestOrder - 1))) ?? null
-
-  if (!previousContest)
-    return candidateStore.getCandidates
-
-  console.log('Heeere!!')
-
-  return registerStore.getRegistered
-    .filter(rc => rc.contestId == previousContest.id)
-    .map(rc => rc.candidate)
 })
 
 const searchQuery = ref('')

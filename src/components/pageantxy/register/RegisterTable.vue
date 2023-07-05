@@ -3,7 +3,7 @@ import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import useRegisterStore from '@/stores/register.store'
 import { onMounted } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
-import SelectContest from '../contests/SelectContest.vue'
+import GenericSelectContest from '../contests/GenericSelectContest.vue'
 import CreateRegisterModal from './CreateRegisterModal.vue'
 import DeleteRegisterModal from './DeleteRegisterModal.vue'
 import UpdateRegisterModal from './UpdateRegisterModal.vue'
@@ -67,7 +67,7 @@ const computedImage = picture => {
               cols="12"
               md="4"
             >
-              <SelectContest
+              <GenericSelectContest
                 v-model="selectedContest"
                 :event-id="selectedEvent"
               />
@@ -97,7 +97,7 @@ const computedImage = picture => {
               <span class="font-weight-bold">{{ item.raw.contest.contestName }}</span>
             </template>
 
-            <!-- contest name -->
+            <!-- user name -->
             <template #item.candidateName="{ item }">
               <div class="d-flex flex-row flex-nowrap align-center">
                 <VAvatar

@@ -1,5 +1,4 @@
 import axiosIns from "@/plugins/axios"
-import useSnackBar from "@/stores/snackbar.store"
 
 
 const ResultType = Object.freeze({
@@ -48,16 +47,11 @@ class GenericService {
   }
     
   async create(payload) {
-    const snackbar = useSnackBar()
-
     return axiosIns.post(this.baseUrl + '/create', payload)
       .then(res => { 
-        snackbar.showMessage('success', `${this.context.toLowerCase()} was created successfuly!`)
-
         return this.success(res.data)
       })
       .catch(err => {
-        snackbar.showMessage('error', `Something went wrong while creating ${this.context.toLowerCase()}!`)
         console.error(err)  
           
         return this.fail(err.response?.data)
@@ -65,16 +59,11 @@ class GenericService {
   }
     
   async update(id, payload) {
-    const snackbar = useSnackBar()
-
     return axiosIns.put(this.baseUrl + `/update/${id}`, payload)
       .then(res => {
-        snackbar.showMessage('success', `${this.context.toLowerCase()} was updated successfuly!`)
-
         return this.success(res.data)
       })
       .catch(err => {
-        snackbar.showMessage('error', `Something went wrong while updating ${this.context.toLowerCase()}!`)
         console.error(err)  
           
         return this.fail(err.response?.data)
@@ -82,16 +71,12 @@ class GenericService {
   }
 
   async delete(id) {
-    const snackbar = useSnackBar()
-
     return axiosIns.delete(this.baseUrl + `/delete/${id}`)
-      .then(res => { 
-        snackbar.showMessage('success', `${this.context.toLowerCase()} was deleted successfuly!`)
+      .then(res => {
 
         return this.success(res.data)
       })
       .catch(err => {
-        snackbar.showMessage('error', `Something went wrong while deleting ${this.context.toLowerCase()}!`)
         console.error(err)  
           
         return this.fail(err.response?.data)

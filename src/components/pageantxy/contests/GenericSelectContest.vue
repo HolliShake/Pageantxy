@@ -1,6 +1,5 @@
 <script setup>
 import { requiredValidator } from '@/@core/utils/validators'
-import ContestRService from '@/signalr/ContestRService'
 import useContestStore from '@/stores/contest.store'
 import { onMounted, watch } from 'vue'
 
@@ -21,21 +20,16 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-
-const contestR = new ContestRService()
 const contestStore = useContestStore()
 const selectedContest = ref(null)
 
 const activeContests = computed(() => {
-
-  let active = contestStore.getContests.find(c => c.isActive)
 
   return contestStore.getContests
     .sort((a, b) => (a.contestOrder - b.contestOrder))
     .filter(c => c.eventId == props.eventId)
 
     // 
-    .filter(c => (active == undefined || active == null) ? true : (active.eventId != c.eventId) ? true : c.contestOrder <= active.contestOrder)
     .map(c => ({
       title: c.contestName,
       value: c.id,
@@ -49,7 +43,7 @@ watch(props, () => {
 }, { deep: true, immediate: true })
 
 watch(activeContests, () => {
-  selectedContest.value = activeContests.value.find(c => c.isActive)?.value ?? (activeContests.value[0]?.value ?? null)
+  selectedContest.value = (activeContests.value[0]?.value ?? null)
 }, { deep: true, immediate: true })
 
 watch(selectedContest, () => {
@@ -58,13 +52,8 @@ watch(selectedContest, () => {
 
 onMounted(() => {
   contestStore.fetchContests()
-  contestR.start()
 })
 
-
-contestR.listen('RecievedUpdate', contest => {
-  contestStore.setContest(contest)
-})
 
 //
 </script>

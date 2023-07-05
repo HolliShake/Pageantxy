@@ -43,6 +43,13 @@ export default ([
         action: 'read',
       },
       {
+        title: 'Score board',
+        to: { name: 'miscs-scoreboard' },
+        icon: { icon: 'tabler-scoreboard' },
+        subject: 'Admin',
+        action: 'read',
+      },
+      {
         title: 'Logs',
         to: { name: 'miscs-logs' },
         icon: { icon: 'tabler-info-square-rounded' },

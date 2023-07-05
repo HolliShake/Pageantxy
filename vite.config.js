@@ -17,7 +17,7 @@ export default defineConfig({
     // port: 8080,
     proxy: {
       "/api": {
-        // target: "https://cqi.ustp.edu.ph",
+        //target: "http://10.10.10.115",
 
         target: "https://localhost:7279",
         secure: false,

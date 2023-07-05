@@ -3,20 +3,43 @@
 import currentEvent from '@/helpers/currentEvent'
 import ContestRService from '@/signalr/ContestRService'
 import useContestStore from '@/stores/contest.store'
+import useEventStore from '@/stores/event.store'
 import { onMounted } from 'vue'
 
 const contestR = new ContestRService()
+const eventStore = useEventStore()
 const contestStore = useContestStore()
 const event = computed(() => currentEvent())
 
 const contest = computed(() => {
-  if (!event.value)
-    return ''
+  // Get happening event or incomming event
+  let dateToday = new Date(Date.now()).getTime()
+  let events = []
 
-  return contestStore.getContests.find(c => c.isActive && c.eventId == event.value.id)
+  eventStore.getEvents.forEach(evt => { 
+    let eStart = new Date(evt.dateFrom).getTime()
+    let eEnd = new Date(evt.dateTo).getTime()
+
+    // Hapenning
+    if (dateToday >= eStart && dateToday <= eEnd)
+    {
+      events.push(evt)
+    }
+  })
+
+  let eventsId = events.map(e => e.id)
+
+  let activeContest = contestStore.getContests
+    .filter(c => c.isActive && eventsId.includes(c.eventId))
+
+    // sort by acending
+    .sort((a, b) => (b.contestOrder - a.contestOrder))
+
+  return (activeContest[0] || null)
 })
 
 onMounted(() => { 
+  eventStore.fetchEvents()
   contestStore.fetchContests()
   contestR.start()
 })

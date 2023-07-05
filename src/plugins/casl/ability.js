@@ -13,8 +13,6 @@ export const initialAbility = [
 // ❗ Anyone can update localStorage so be careful and please update this
 const stringifiedUserAbilities = localStorage.getItem('userAbilities')
 
-const existingAbility = ((stringifiedUserAbilities != null) || stringifiedUserAbilities != undefined)
-  ? JSON.parse(stringifiedUserAbilities)
-  : null
+const existingAbility = stringifiedUserAbilities ? JSON.parse(stringifiedUserAbilities) : null
 
 export default new Ability(existingAbility || initialAbility)

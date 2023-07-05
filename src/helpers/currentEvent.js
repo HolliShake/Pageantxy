@@ -1,16 +1,15 @@
 import useEventStore from "@/stores/event.store"
 
 
-
 function currentEvent()
 {
   const eventStore = useEventStore()
 
-  if (eventStore.getEvents.length <= 0) return null
+  if (eventStore.getEvents.length <= 0) return []
 
   // Get happening event or incomming event
   let dateToday = new Date(Date.now()).getTime()
-  let event = null, nearest = null, nearestTime = 0
+  let events = []
 
   eventStore.getEvents.forEach(evt => { 
     let eStart = new Date(evt.dateFrom).getTime()
@@ -19,18 +18,11 @@ function currentEvent()
     // Hapenning
     if (dateToday >= eStart && dateToday <= eEnd)
     {
-      event = evt
-    }
-
-    // Nearest
-    if ((!(!event)) && (nearest == null) && eStart > dateToday)
-    {
-      nearest = evt
-      nearestTime = eStart
+      events.push(evt)
     }
   })
 
-  return (event || nearest)
+  return events
 }
 
 

@@ -1,8 +1,8 @@
 <script setup>
-import useSnackBar from "@/stores/snackbar.store"
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { hexToRgb } from '@layouts/utils'
+import { inject } from "vue"
 import { useTheme } from 'vuetify'
 
 const {
@@ -13,7 +13,7 @@ const {
 } = useThemeConfig()
 
 const { global } = useTheme()
-const snackbarStore = useSnackBar()
+const snackbarStore = inject('useSnackbar')
 
 // ℹ️ Sync current theme with initial loader theme
 syncInitialLoaderTheme()

@@ -1,9 +1,10 @@
 
 <script setup>
 import useRegisterStore from '@/stores/register.store'
-import { onMounted } from 'vue'
+import { inject, onMounted, watch } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
 import Action from './Action.vue'
+import UserAvatarModal from './UserAvatarModal.vue'
 
 const props = defineProps({
   contestId: {
@@ -24,10 +25,6 @@ onMounted(() => {
   registeredStore.fetchRegistered()
 })
 
-const computedImage = picture => {
-  return `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`
-}
-
 function truncate(name)
 {
   if (name.trim().length >= 25)
@@ -43,6 +40,12 @@ const headers = ref([
   { title: '#', key: 'candidateNumber', width: '120', align: 'center' },
   { title: 'CANDIDATE', key: 'candidate', width: '1200' },
 ])
+
+const scoresRef = inject('scores')
+
+watch(registeredCandidates, () => { 
+  scoresRef.value = registeredCandidates.value.map(() => ref(null))
+}, { deep: true })
 
 //
 </script>
@@ -60,19 +63,9 @@ const headers = ref([
       <strong class="text-h4"># {{ (item.raw.candidate.candidateNumber < 10) ? `0${item.raw.candidate.candidateNumber}` : item.raw.candidate.candidateNumber }}</strong>
     </template>
     <!-- candidate -->
-    <template #item.candidate="{ item }">
+    <template #item.candidate="{ item, index }">
       <div class="d-flex flex-row flex-nowrap flex-shrink-0 align-center pa-2">
-        <VAvatar
-          size="64"
-          rounded="lg"
-        >
-          <VImg
-            cover
-            :src="computedImage(item.raw.candidate.picture)"
-            width="64"
-            max-width="64"
-          />
-        </VAvatar>
+        <UserAvatarModal :picture="item.raw.candidate.picture" />
         <div class="d-flex flex-row align-center w-100 h-100">
           <div class="d-flex flex-nowrap flex-row flex-shrink-0 shrink-0 ms-md-5">
             <div>
@@ -94,6 +87,7 @@ const headers = ref([
 
           <VSpacer />
           <Action
+            :ref="scoresRef[index]"
             :contest-id="props.contestId"
             :candidate-id="item.raw.candidate.id"
           />

@@ -1,8 +1,6 @@
 import { defineStore } from "pinia"
 
 
-
-
 const useSnackBar = defineStore('SnackBar', {
   state: () => ({
     isVisible: false,

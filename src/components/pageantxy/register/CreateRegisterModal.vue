@@ -1,8 +1,8 @@
 <script setup>
 import SelectCandidate from '@/components/pageantxy/candidates/SelectCandidate.vue'
-import SelectActiveContest from '@/components/pageantxy/contests/SelectActiveContest.vue'
 import useRegisterStore from '@/stores/register.store'
 import { nextTick } from 'vue'
+import GenericSelectContest from '../contests/GenericSelectContest.vue'
 
 const parameters = defineProps({
   eventId: {
@@ -79,7 +79,7 @@ const onSubmit = async () => {
         <VForm ref="refVForm">
           <VRow>
             <VCol cols="12">
-              <SelectActiveContest
+              <GenericSelectContest
                 v-model="formState.contestId"
                 :event-id="parameters.eventId"
                 is-required

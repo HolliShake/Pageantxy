@@ -3,7 +3,7 @@
   "version": "8.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 4000 --host",
     "build": "vite build",
     "preview": "vite preview --port 5050",
     "lint": "eslint . -c .eslintrc.js --fix --ext .ts,.js,.vue,.tsx,.jsx",

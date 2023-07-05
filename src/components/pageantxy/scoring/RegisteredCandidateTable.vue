@@ -1,11 +1,12 @@
 <script setup>
 import SelectContest from '@/components/pageantxy/contests/SelectContest.vue'
+import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
 import Group from '@/defaults/Group'
-import currentEvent from '@/helpers/currentEvent'
 import useEventStore from '@/stores/event.store'
-import { onMounted } from 'vue'
+import { onMounted, provide } from 'vue'
 import PostButton from './PostButton.vue'
 
+import SaveAllButton from './SaveAllButton.vue'
 import SingleView from './SingleView.vue'
 
 const availableGroup = ref([
@@ -20,7 +21,10 @@ const controlState = ref({
 
 const eventStore = useEventStore()
 
-const computedEvent = computed(() => currentEvent())
+const selectedEvent = ref(null)
+
+const scores = ref([])
+const listScore= provide('scores', scores)
 
 onMounted(() => {
   eventStore.fetchEvents()
@@ -35,18 +39,33 @@ onMounted(() => {
       <VRow>
         <VCol
           cols="12"
-          md="8"
+          md="3"
+        >
+          <SelectEvent v-model="selectedEvent" />
+        </VCol>
+        <VCol
+          cols="12"
+          md="3"
         >
           <SelectContest
             v-model="controlState.selectedContest"
-            :event-id="computedEvent?.id"
+            :event-id="selectedEvent"
           />
         </VCol>
         <VCol
           cols="12"
-          md="4"
+          md="3"
         >
           <PostButton :contest-id="controlState.selectedContest" />
+        </VCol>
+        <VCol
+          cols="12"
+          md="3"
+        >
+          <SaveAllButton
+            v-model="scores"
+            :contest-id="controlState.selectedContest"
+          />
         </VCol>
       </VRow>
     </VCardText>

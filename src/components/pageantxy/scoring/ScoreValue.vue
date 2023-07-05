@@ -6,7 +6,7 @@ import { useTheme } from 'vuetify'
 
 const props = defineProps({
   score: {
-    type: Number,
+    type: [Number, String],
     required: true,
   },
   min: {
@@ -38,9 +38,6 @@ const computedColor = computed(() => {
   
   return '#c26de3'
 })
-
-
-const computedScore = computed(() => props.score)
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors

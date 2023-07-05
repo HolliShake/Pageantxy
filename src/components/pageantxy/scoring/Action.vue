@@ -80,7 +80,7 @@ watch(props, () => {
     })
 }, { deep: true, immediate: true })
 
-const onSubmit = async () => { 
+async function onSubmit() { 
 
   if (scoreSubmitted.value) return
 
@@ -106,6 +106,11 @@ const onSubmit = async () => {
   }
   
 }
+
+
+defineExpose({
+  onSubmit,
+})
 
 onMounted(() => {
   scoreStore.fetchAllScoresByJudgeId(authStore.getId)
