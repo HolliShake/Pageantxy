@@ -2,8 +2,9 @@
 import ScrollToTop from '@core/components/ScrollToTop.vue'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { hexToRgb } from '@layouts/utils'
-import { inject } from "vue"
+import { inject, onMounted } from "vue"
 import { useTheme } from 'vuetify'
+import RefreshRService from './signalr/RefreshRService'
 
 const {
   syncInitialLoaderTheme,
@@ -14,11 +15,21 @@ const {
 
 const { global } = useTheme()
 const snackbarStore = inject('useSnackbar')
+const refreshR = new RefreshRService()
 
 // ℹ️ Sync current theme with initial loader theme
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
 handleSkinChanges()
+
+
+refreshR.listen('RefreshPage', () => { 
+  window.location.reload()
+})
+
+onMounted(() => {
+  refreshR.start()
+})
 </script>
 
 <template>

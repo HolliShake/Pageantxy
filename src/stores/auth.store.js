@@ -66,6 +66,8 @@ const useAuthStore = defineStore('AuthStore', {
 
       let token = jwt_decode(this.accessToken)
       localStorage.setItem('userAbilities', token[ClaimTypes.Role])
+
+      
       
       return action(result)
     },

@@ -1,4 +1,5 @@
 <script setup>
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { isAdmin } from '@/plugins/casl/util'
 import router from '@/router'
 import useAuthStore from '@/stores/auth.store'
@@ -29,7 +30,7 @@ const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 
-
+const ability = useAppAbility()
 
 const onSignin = async () => { 
 
@@ -37,6 +38,8 @@ const onSignin = async () => {
   {
     authStore.login(email.value, password.value)
       .then(user => {
+
+        ability.update(JSON.parse(localStorage.getItem('userAbilities')))
 
         if (isAdmin())
           router.push('/dashboard')

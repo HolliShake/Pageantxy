@@ -1,5 +1,6 @@
 <script setup>
 import SelectEvent from '@/components/pageantxy/event/SelectEvent.vue'
+import RefreshRService from '@/signalr/RefreshRService'
 import useRegisterStore from '@/stores/register.store'
 import { onMounted } from 'vue'
 import { VDataTable } from 'vuetify/labs/VDataTable'
@@ -8,6 +9,7 @@ import CreateRegisterModal from './CreateRegisterModal.vue'
 import DeleteRegisterModal from './DeleteRegisterModal.vue'
 import UpdateRegisterModal from './UpdateRegisterModal.vue'
 
+const refreshR = new RefreshRService()
 const registerStore = useRegisterStore()
 const selectedEvent = ref(null)
 const selectedContest = ref(null) 
@@ -44,6 +46,17 @@ const computedImage = picture => {
   return `${import.meta.env.VITE_APP_APP_URL}/files/${picture}`
 }
 
+
+
+async function handleRefresh()
+{
+  await refreshR.send("RefreshPage")
+}
+
+onMounted(() => {
+  refreshR.start()
+})
+
 //
 </script>
 
@@ -76,6 +89,14 @@ const computedImage = picture => {
                 :event-id="selectedEvent"
                 :contest-id="selectedContest"
               />
+            </VCol>
+            <VCol
+              cols="12"
+              md="4"
+            >
+              <VBtn @click="handleRefresh">
+                Refresh
+              </VBtn>
             </VCol>
           </VRow>
         </VCardText>

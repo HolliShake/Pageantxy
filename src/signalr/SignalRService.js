@@ -24,6 +24,10 @@ class SignalRService {
 
   async send(event, data) {
     if (this.client.state != "Connected") return
+
+    if (!data)
+      
+      return await this.client.invoke(event)
     
     return await this.client.invoke(event, data)
   }
